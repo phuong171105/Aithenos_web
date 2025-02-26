@@ -32,14 +32,11 @@ export default function OverviewThungRac() {
             <p className="font-medium">Các bước thực hiện:</p>
             <div className="relative">
               <img
-                src="src/assets/Product/3.png"
+                src="/src/assets/Product_core/3.png"
                 alt="Thùng Rác"
                 width={600}
                 className="rounded-lg"
               />
-              <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
-                <Lock className="w-8 h-8 text-white" />
-              </div>
             </div>
           </div>
 

@@ -37,14 +37,11 @@ export default function OverviewOToCanhQuat() {
             {/* Ảnh chính */}
             <div className="relative">
               <img
-                src="src/assets/Product/6.png" // Thay placeholder bằng ảnh thực tế
+                src="/src/assets/Product_core/6.png"
                 alt="Ô Tô Cánh Quạt"
                 width={600}
                 className="rounded-lg"
               />
-              <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
-                <Lock className="w-8 h-8 text-white" />
-              </div>
             </div>
           </div>
 
