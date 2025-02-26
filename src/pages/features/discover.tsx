@@ -10,7 +10,7 @@ export default function Discover() {
   const location = useLocation();
   const [sortedProjects, setSortedProjects] = useState<any[]>([]);
 
-  // Danh sách dự án ban đầu (điều chỉnh tên nguyên liệu cho khớp với API)
+  // Danh sách dự án ban đầu
   const initialProjects = [
     {
       image: "src/assets/Product/1.png",
@@ -72,42 +72,74 @@ export default function Discover() {
   const calculateScore = (project: any, apiResult: Record<string, number>) => {
     let score = 0;
     project.materials.forEach((material: string) => {
-      const materialName = material.split(" ").slice(1).join(" "); // Lấy tên nguyên liệu (bỏ số lượng)
-      const materialCountMatch = material.match(/^(\d+)/); // Lấy số lượng từ chuỗi
+      const materialName = material.split(" ").slice(1).join(" ");
+      const materialCountMatch = material.match(/^(\d+)/);
       const materialCount = materialCountMatch ? parseInt(materialCountMatch[1]) : 1;
 
-      // So sánh với API result
       for (const [apiMaterial, count] of Object.entries(apiResult)) {
         if (materialName.toLowerCase() === apiMaterial.toLowerCase()) {
-          score += Math.min(materialCount, count); // Tăng điểm dựa trên số lượng khớp
+          score += Math.min(materialCount, count);
         }
       }
     });
     return score;
   };
 
+  // Hàm tính nguyên liệu còn thiếu
+  const calculateMissingMaterials = (project: any, apiResult: Record<string, number>) => {
+    const missingMaterials: string[] = [];
+    project.materials.forEach((material: string) => {
+      const materialName = material.split(" ").slice(1).join(" ");
+      const materialCountMatch = material.match(/^(\d+)/);
+      const materialCount = materialCountMatch ? parseInt(materialCountMatch[1]) : 1;
+
+      const apiCount = Object.entries(apiResult).reduce((acc, [apiMaterial, count]) => {
+        return materialName.toLowerCase() === apiMaterial.toLowerCase() ? count : acc;
+      }, 0);
+
+      const missingCount = materialCount - apiCount;
+      if (missingCount > 0) {
+        missingMaterials.push(`${missingCount} ${materialName}`);
+      }
+    });
+    return missingMaterials;
+  };
+
+  // Hàm chuẩn hóa tên sản phẩm thành kebab-case
+  const toKebabCase = (str: string) => {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  };
+
   useEffect(() => {
-    const apiResult = location.state?.apiResult || {}; // Lấy kết quả API từ state
+    const apiResult = location.state?.apiResult || {};
     console.log("API Result:", apiResult);
 
-    // Sắp xếp dự án dựa trên điểm số
-    const sorted = [...initialProjects].sort((a, b) => {
-      const scoreA = calculateScore(a, apiResult);
-      const scoreB = calculateScore(b, apiResult);
-      return scoreB - scoreA; // Sắp xếp giảm dần theo điểm
-    });
+    const sorted = [...initialProjects]
+      .map((project) => ({
+        ...project,
+        missingMaterials: calculateMissingMaterials(project, apiResult),
+      }))
+      .sort((a, b) => {
+        const scoreA = calculateScore(a, apiResult);
+        const scoreB = calculateScore(b, apiResult);
+        return scoreB - scoreA;
+      });
 
     setSortedProjects(sorted);
   }, [location.state]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <NavHeader />
-      <div className="max-w-6xl mx-auto space-y-4 pt-10">
-        <div className="flex gap-4 justify-between">
+      <div className="max-w-7xl mx-auto space-y-6 pt-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <Button
             variant="default"
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
             onClick={() => navigate("/")}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -115,7 +147,7 @@ export default function Discover() {
           </Button>
           <Button
             variant="default"
-            className="bg-blue-500 hover:bg-blue-700"
+            className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
             onClick={() => navigate("/upload-image")}
           >
             <Upload className="w-4 h-4 mr-2" />
@@ -123,9 +155,13 @@ export default function Discover() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
           {sortedProjects.map((project, index) => (
-            <ProjectCard key={index} {...project} />
+            <ProjectCard
+              key={index}
+              {...project}
+              onClick={() => navigate(`/product/${toKebabCase(project.name)}/overview`)}
+            />
           ))}
         </div>
       </div>
