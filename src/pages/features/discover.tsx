@@ -68,7 +68,7 @@ export default function Discover() {
     },
   ];
 
-  // Hàm tính điểm cho mỗi dự án dựa trên API result
+  // Hàm tính điểm cho mỗi dự án dựa trên API result (giữ nguyên để tham khảo)
   const calculateScore = (project: any, apiResult: Record<string, number>) => {
     let score = 0;
     project.materials.forEach((material: string) => {
@@ -124,9 +124,10 @@ export default function Discover() {
         missingMaterials: calculateMissingMaterials(project, apiResult),
       }))
       .sort((a, b) => {
-        const scoreA = calculateScore(a, apiResult);
-        const scoreB = calculateScore(b, apiResult);
-        return scoreB - scoreA;
+        // Sắp xếp theo số lượng nguyên liệu còn thiếu (ít nhất lên đầu)
+        const missingCountA = a.missingMaterials.length;
+        const missingCountB = b.missingMaterials.length;
+        return missingCountA - missingCountB;
       });
 
     setSortedProjects(sorted);
