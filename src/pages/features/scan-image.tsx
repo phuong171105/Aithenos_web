@@ -38,7 +38,7 @@ export default function ScanImage() {
           method: "POST",
           body: formData,
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
           },
         });
 
@@ -118,8 +118,8 @@ export default function ScanImage() {
                   <p className="font-medium">Bạn có:</p>
                   {apiResult ? (
                     <div className="flex items-center gap-4 flex-wrap">
-                      {Object.entries(apiResult).map(
-                        ([itemName, quantity]: [string, number]) => (
+                      {Object.entries(apiResult as Record<string, number>).map(
+                        ([itemName, quantity]) => (
                           <div
                             key={itemName}
                             className="flex items-center mb-2"
@@ -138,15 +138,18 @@ export default function ScanImage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-medium mb-3">
-                  Xác nhận số lượng
-                </h3>
+                <h3 className="text-lg font-medium mb-3">Xác nhận số lượng</h3>
                 <div className="space-y-2">
                   <Button
                     className="flex items-center bg-green-100 hover:bg-green-400 text-green-600 transition duration-300 ease-in-out cursor-pointer"
-                    onClick={() => navigate("/discover", { state: { apiResult } })}
+                    onClick={() =>
+                      navigate("/discover", { state: { apiResult } })
+                    }
                   >
-                    <svg viewBox="0 0 24 24" className="h-6 w-6 mr-2 fill-current">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-6 w-6 mr-2 fill-current"
+                    >
                       <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
                     </svg>
                     Đúng

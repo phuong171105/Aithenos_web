@@ -2,7 +2,7 @@ import { NavHeader } from "@/pages/_components/nav-header";
 import { CoolMode } from "@/components/ui/cool-mode";
 import { Button } from "@/components/ui/button";
 import SectionLandingPage from "./section";
-import Footer from "./_components/footer";
+// import Footer from "./_components/footer";
 import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
@@ -44,7 +44,7 @@ export default function LandingPage() {
       </main>
 
       <SectionLandingPage />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

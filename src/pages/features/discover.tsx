@@ -69,21 +69,21 @@ export default function Discover() {
   ];
 
   // Hàm tính điểm cho mỗi dự án dựa trên API result (giữ nguyên để tham khảo)
-  const calculateScore = (project: any, apiResult: Record<string, number>) => {
-    let score = 0;
-    project.materials.forEach((material: string) => {
-      const materialName = material.split(" ").slice(1).join(" ");
-      const materialCountMatch = material.match(/^(\d+)/);
-      const materialCount = materialCountMatch ? parseInt(materialCountMatch[1]) : 1;
+  // const calculateScore = (project: any, apiResult: Record<string, number>) => {
+  //   let score = 0;
+  //   project.materials.forEach((material: string) => {
+  //     const materialName = material.split(" ").slice(1).join(" ");
+  //     const materialCountMatch = material.match(/^(\d+)/);
+  //     const materialCount = materialCountMatch ? parseInt(materialCountMatch[1]) : 1;
 
-      for (const [apiMaterial, count] of Object.entries(apiResult)) {
-        if (materialName.toLowerCase() === apiMaterial.toLowerCase()) {
-          score += Math.min(materialCount, count);
-        }
-      }
-    });
-    return score;
-  };
+  //     for (const [apiMaterial, count] of Object.entries(apiResult)) {
+  //       if (materialName.toLowerCase() === apiMaterial.toLowerCase()) {
+  //         score += Math.min(materialCount, count);
+  //       }
+  //     }
+  //   });
+  //   return score;
+  // };
 
   // Hàm tính nguyên liệu còn thiếu
   const calculateMissingMaterials = (project: any, apiResult: Record<string, number>) => {

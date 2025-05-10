@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { NavHeader } from "@/pages/_components/nav-header";
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft} from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 
 export default function OverviewXeBongBay() {
